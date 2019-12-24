@@ -27,7 +27,7 @@ const Canvas = props => {
 
         const _componentWillMount = () => hydrate(props.onMount);
         const _dimensionsWillCange = () => window.addEventListener("resize", () => hydrate(props.onResize));
-        const _componentWillUnmount = () => () => window.removeEventListener("resize", hydrate)
+        const _componentWillUnmount = () => window.removeEventListener("resize", hydrate)
 
         _componentWillMount()
         _dimensionsWillCange()
