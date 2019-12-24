@@ -25,7 +25,6 @@ class HelloCanvas extends Component {
 
 function App() {
   return <HelloCanvas width="100vw" height="100vh" />;
-
 }
 
 export default App;
