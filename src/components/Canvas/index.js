@@ -20,6 +20,8 @@ const getParentDimensions = canvas => {
 }
 
 const Canvas = props => {
+    const [size, setSize] = useState(getParentDimensions(canvas.current));
+
     const hydrate = callback => {
         setSize(getParentDimensions(canvas.current));
         setTimeout(() => {
@@ -44,8 +46,6 @@ const Canvas = props => {
     }, []);
 
     const canvas = useRef();
-    const [size, setSize] = useState(getParentDimensions(canvas.current));
-
     const { width: elementWidth, height: elementHeight } = size;
     const { style, width, height } = props;
     const styles = {
