@@ -10,15 +10,15 @@ class HelloCanvas extends Component {
   }
   render() {
     const { width, height, style } = this.props;
+    console.log(style)
     return (
       <Canvas
-        // app={this}
         onMount={this.draw}
         onResize={this.draw}
-        width={width}
-        height={height}
-        style={style}
-        style={{ width, height, margin: "0 auto" }} />
+        refreshRate={10}
+        dimensions={{ width, height }}
+        style={{ width, height, margin: "0 auto" }}
+      />
     )
   }
 }
