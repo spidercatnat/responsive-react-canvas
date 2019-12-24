@@ -9,22 +9,21 @@ class HelloCanvas extends Component {
     ctx.stroke();
   }
   render() {
-    const { width, height, style } = this.props;
-    console.log(style)
+    const { dimensions } = this.props;
     return (
       <Canvas
         onMount={this.draw}
         onResize={this.draw}
         refreshRate={10}
-        dimensions={{ width, height }}
-        style={{ width, height, margin: "0 auto" }}
+        dimensions={dimensions}
+        style={{ margin: "0 auto" }}
       />
     )
   }
 }
 
 function App() {
-  return <HelloCanvas width="100vw" height="100vh" />;
+  return <HelloCanvas dimensions={{ width: "100vw", height: "100vh" }} />;
 }
 
 export default App;

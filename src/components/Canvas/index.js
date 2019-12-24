@@ -34,8 +34,16 @@ const Canvas = props => {
         [props.refreshRate, props.onResize, props.onMount]
     );
     const { width: elementWidth, height: elementHeight } = size;
+    const { style, dimensions: { width, height } } = props;
+    const styles = {
+        container: {
+            ...style,
+            width,
+            height
+        }
+    }
     return (
-        <div style={props.style}>
+        <div style={styles.container}>
             <canvas
                 ref={canvas}
                 width={elementWidth * scale()}
