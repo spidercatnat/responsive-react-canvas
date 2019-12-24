@@ -14,28 +14,25 @@ import { getParentDimensions, scale } from './util';
 const Canvas = props => {
     const canvas = useRef();
     const [size, setSize] = useState(getParentDimensions(canvas.current));
-
-    useLayoutEffect(() => {
-        function hydrate(callback) {
-            setSize(getParentDimensions(canvas.current));
-            setTimeout(() => {
-                const { width: bitmapWidth, height: bitmapHeight } = canvas.current;
-                const ctx = canvas.current.getContext("2d");
-                callback({ ctx, width: bitmapWidth, height: bitmapHeight })
-            }, props.refreshRate || 50);
-        }
-
-        const _componentWillMount = () => hydrate(props.onMount);
-        const _dimensionsWillCange = () => window.addEventListener("resize", () => hydrate(props.onResize));
-        const _componentWillUnmount = () => window.removeEventListener("resize", hydrate)
-
-        _componentWillMount()
-        _dimensionsWillCange()
-
-        return _componentWillUnmount();
-
-    }, [props.refreshRate, props.onResize, props.onMount]);
-
+    useLayoutEffect(
+        () => {
+            function _hydrate(callback) {
+                setSize(getParentDimensions(canvas.current));
+                setTimeout(() => {
+                    const { width: bitmapWidth, height: bitmapHeight } = canvas.current;
+                    const ctx = canvas.current.getContext("2d");
+                    callback({ ctx, width: bitmapWidth, height: bitmapHeight })
+                }, props.refreshRate || 50);
+            }
+            const _componentWillMount = () => _hydrate(props.onMount);
+            const _dimensionsWillCange = () => window.addEventListener("resize", () => _hydrate(props.onResize));
+            const _componentWillUnmount = () => window.removeEventListener("resize", _hydrate)
+            _componentWillMount()
+            _dimensionsWillCange()
+            return _componentWillUnmount();
+        },
+        [props.refreshRate, props.onResize, props.onMount]
+    );
     const { width: elementWidth, height: elementHeight } = size;
     return (
         <div style={props.style}>
