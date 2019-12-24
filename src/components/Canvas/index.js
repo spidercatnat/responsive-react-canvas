@@ -20,9 +20,6 @@ const getParentDimensions = canvas => {
 }
 
 const Canvas = props => {
-    const canvas = useRef();
-    const [size, setSize] = useState(getParentDimensions(canvas.current));
-
     const hydrate = callback => {
         setSize(getParentDimensions(canvas.current));
         setTimeout(() => {
@@ -32,23 +29,34 @@ const Canvas = props => {
         }, 50);
     }
 
-    const _componentWillMount = () => hydrate(props.onMount);
+    const componentWillMount = () => hydrate(props.onMount);
 
-    const _dimensionsWillCange = () => {
+    const dimensionsWillCange = () => {
         window.addEventListener("resize", () => {
             hydrate(props.onResize);
         });
     }
 
     useLayoutEffect(() => {
-        _componentWillMount()
-        _dimensionsWillCange()
+        componentWillMount()
+        dimensionsWillCange()
         return () => window.removeEventListener("resize", hydrate)
     }, []);
 
+    const canvas = useRef();
+    const [size, setSize] = useState(getParentDimensions(canvas.current));
+
     const { width: elementWidth, height: elementHeight } = size;
+    const { style, width, height } = props;
+    const styles = {
+        container: {
+            ...style,
+            width,
+            height
+        }
+    }
     return (
-        <div style={props.style}>
+        <div style={styles.container}>
             <canvas
                 ref={canvas}
                 width={elementWidth * scale}
