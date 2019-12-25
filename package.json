@@ -1,7 +1,8 @@
 {
   "name": "responsive-react-canvas-hoc",
-  "version": "0.1.1",
-  "private": true,
+  "description": "A Canvas HOC for React with a straightforward dependency injection pattern for app logic.",
+  "version": "0.1.2",
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -10,11 +11,17 @@
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0"
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "publish:npm": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files"
   },
   "eslintConfig": {
     "extends": "react-app"
