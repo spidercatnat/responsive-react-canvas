@@ -30,8 +30,7 @@ const Canvas = props => {
             _componentWillMount()
             _dimensionsWillCange()
             return _componentWillUnmount();
-        },
-        [props.refreshRate, props.onResize, props.onMount]
+        }, [props.refreshRate, props.onResize, props.onMount]
     );
     const { width: elementWidth, height: elementHeight } = size;
     const { style, dimensions: { width, height } } = props;
