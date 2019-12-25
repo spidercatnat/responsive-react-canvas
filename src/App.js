@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Canvas } from "./components";
 
 class HelloCanvas extends Component {
-  draw(stage) {
-    const { ctx, width, height } = stage;
+  draw({ canvas, ctx, width, height }) {
     ctx.moveTo(0, 0);
     ctx.lineTo(width, height);
     ctx.stroke();

@@ -21,7 +21,7 @@ const Canvas = props => {
                 setTimeout(() => {
                     const { width: bitmapWidth, height: bitmapHeight } = canvas.current;
                     const ctx = canvas.current.getContext("2d");
-                    callback({ ctx, width: bitmapWidth, height: bitmapHeight })
+                    callback({ canvas: canvas.current, ctx, width: bitmapWidth, height: bitmapHeight })
                 }, props.refreshRate || 50);
             }
             const _componentWillMount = () => _hydrate(props.onMount);
