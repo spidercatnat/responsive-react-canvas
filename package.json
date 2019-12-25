@@ -1,7 +1,7 @@
 {
   "name": "responsive-react-canvas-hoc",
   "description": "A Canvas HOC for React with a straightforward dependency injection pattern for app logic.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
