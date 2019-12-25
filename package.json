@@ -3,6 +3,10 @@
   "description": "A Canvas HOC for React with a straightforward dependency injection pattern for app logic.",
   "version": "0.1.3",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bloom510/responsve-react-canvas-hoc.git"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
