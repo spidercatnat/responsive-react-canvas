@@ -1,6 +1,6 @@
 import React, { useRef, useState, useLayoutEffect } from 'react';
+import PropTypes from 'prop-types';
 import { getParentDimensions, scale } from './util';
-
 
 /**
  * props:
@@ -51,6 +51,13 @@ const Canvas = props => {
             />
         </div>
     )
+}
+
+Canvas.propTypes = {
+    onMount: PropTypes.func.isRequired,
+    onResize: PropTypes.func.isRequired,
+    dimensions: PropTypes.objectOf(PropTypes.string),
+    refreshRate: PropTypes.number
 }
 
 export { Canvas };
