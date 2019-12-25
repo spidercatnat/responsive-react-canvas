@@ -1,7 +1,7 @@
 {
   "name": "responsive-react-canvas-hoc",
   "description": "A Canvas HOC for React with a straightforward dependency injection pattern for app logic.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "repository": {
     "type": "git",
