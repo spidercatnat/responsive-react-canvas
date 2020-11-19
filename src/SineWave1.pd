@@ -1,0 +1,110 @@
+//SineWave sw;
+
+
+//void setup() {
+//  size(740, 360);
+//  sw = new SineWave(16, 12.0, 1.0);
+
+//}
+
+//void draw() {
+//  background(0);
+//  sw.calcWave();
+//  sw.renderWave();
+
+    
+//}
+
+//class SineWave {
+// int xspacing;
+// int w;
+// float theta = 0.0;
+// float amplitude;
+// float period;
+// float dx;
+// float[] yvalues;
+ 
+// SineWave(int xspacing, float amplitude, float period){
+//   this.xspacing = xspacing;
+//   this.amplitude = amplitude;
+//   this.period = period;
+//   this.w = width+16;
+//   println(this.w, width);
+//   this.dx = (TWO_PI / period) * this.xspacing;
+//   this.yvalues = new float[this.w/xspacing];
+// }
+ 
+//   void calcWave() {
+//    // Increment theta (try different values for 'angular velocity' here
+//    this.theta += 0.02;
+  
+//    // For every x value, calculate a y value with sine function
+//    float x = this.theta;
+//    for (int i = 0; i < yvalues.length; i++) {
+//      this.yvalues[i] = sin(x)*this.amplitude;
+//      x+=dx;
+//    }
+//  }
+
+//  void renderWave() {
+//    noStroke();
+//    fill(255);
+//    stroke(255);
+//    // A simple way to draw the wave with an ellipse at each location
+//    for (int x = 0; x < this.yvalues.length; x++) {
+//      ellipse(x*this.xspacing, height/2+this.yvalues[x], 3, 3);
+
+//    }
+//  }
+
+//}
+
+
+
+// sine variables
+float x, y, y2, theta  = 0;
+float radius = 128;
+int period = 2;
+int frequency = 12;
+int amplitude;
+ 
+// pulse variables
+int millis1;
+int millis2;
+ 
+float deltaX = 5;
+ 
+void setup() {
+  size(512, 256);
+  background(0);
+  millis1 = millis();
+  millis2 = millis();
+  theta = deltaX;
+}
+ 
+void draw() {
+  // sine
+  y2 = y;
+  stroke(255);
+  y = sin(radians(theta*x)) * radius;
+  x++;
+ 
+  if (x >= width) x = 0;
+  line(x, y+height/2, x-1, y2+height/2);
+  
+
+   if (x >= width) x = 0;
+  line(x, y+height/2, x-1, y2+height/2);
+ 
+  // pulse
+  millis2 = millis();
+  if ((millis2-millis1) > 1000/theta) {
+    noStroke();
+    fill(255);
+    millis1 = millis();
+  }
+  fill(0, 32);
+}
+ 
+
+

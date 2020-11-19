@@ -1,64 +1,139 @@
 import React, { Component } from "react";
 import { Canvas } from "./components";
 
-const PHI = (1 + Math.sqrt(5)) / 2;
+const TWO_PI = 2 * Math.PI;
+
+class SineWave {
+  constructor(
+    frequency,
+    amplitude,
+    period = 2,
+    xspacing = 1,
+    { canvasWidth, canvasHeight, ctx },
+    r = 0,
+    g = 0,
+    b = 0
+  ) {
+    this.initAmp = amplitude;
+    this.canvasWidth = canvasWidth;
+    this.canvasHeight = canvasHeight;
+    this.ctx = ctx;
+    this.xspacing = xspacing;
+    this.amplitude = amplitude;
+    this.period = period;
+    this.w = canvasWidth + xspacing;
+    this.dx = TWO_PI / (canvasWidth / period);
+    this.yvalues = new Array(this.w);
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.theta = 0;
+    this.coords = [];
+    this.increasing = true;
+    this.decreasing = false;
+  }
+
+  calcWave = () => {
+    const { yvalues, dx, canvasHeight } = this;
+
+    if (this.amplitude >= this.initAmp * 5) {
+      this.increasing = false;
+      this.decreasing = true;
+    }
+
+    if (this.amplitude <= 0) {
+      this.increasing = true;
+      this.decreasing = false;
+    }
+
+    if (this.increasing) {
+      this.amplitude = this.amplitude + 1;
+    }
+
+    if (this.decreasing) {
+      this.amplitude = this.amplitude - 1;
+    }
+
+    // Increment theta (try different values for 'angular velocity' here
+    this.theta += 0.01;
+    let x = this.theta;
+
+    for (let i = 0; i < yvalues.length; i++) {
+      // scaled overtones
+      this.yvalues[i] = Math.sin(this.amplitude * x) * this.amplitude;
+
+      //scaled amplitudes
+      // this.yvalues[i] = Math.sin(x) * this.amplitude;
+
+      this.coords[i] = {
+        x: i * this.xspacing,
+        y: canvasHeight / 2 + this.yvalues[i],
+      };
+      x += dx;
+    }
+  };
+}
 
 class HelloCanvas extends Component {
   draw = ({ canvas, ctx, width, height }) => {
     this.stage = { canvas, ctx, width, height };
+    ctx.clearRect(0, 0, width, height);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.clearRect(0, 0, width, height);
+    ctx.lineWidth = 0.5;
+    this.waves = [];
+    for (let i = 0; i <= 13; i++) {
+      if (this.waves[i]?.anim) cancelAnimationFrame(this.anim);
+      this.waves.push(
+        new SineWave(
+          1,
+          i, //amplitude
+          i, // period
+          i, // xspacing
+          {
+            canvasWidth: width,
+            canvasHeight: height,
+            ctx,
+          },
+          170 + i,
+          200,
+          200 + i
+          // Math.round(Math.random() * 255),
+          // Math.round(Math.random() * 255),
+          // Math.round(Math.random() * 255)
+        )
+      );
+    }
+
+    this.renderWaves();
+  };
+
+  renderWaves = () => {
+    const { ctx, width, height } = this.stage;
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, width, height);
-    this.amplitudesByOvertone(1, 11);
-    // this.plotSine(1, 11);
-  };
+    this.waves.forEach((w) => {
+      const { ctx, width, height } = this.stage;
+      const { r, g, b, coords, calcWave } = w;
+      calcWave();
 
-  tattooIdea1 = () => {
-    for (let i = 1; i <= 13; i++) {
-      this.plotSine(i, i);
-    }
-  };
+      ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
 
-  amplitudesByOvertone = (freq, ampl) => {
-    this.plotSine(freq, ampl);
-    this.anim = requestAnimationFrame(() => {
-      if (freq <= 13) {
-        this.amplitudesByOvertone(freq + 1, ampl + 10);
-      } else {
-        return cancelAnimationFrame(this.anim);
-      }
+      ctx.beginPath();
+      coords.forEach((point, index) => {
+        ctx.moveTo(point.x, point.y);
+        if (index < coords.length - 1) {
+          ctx.lineTo(coords[index + 1].x, coords[index + 1].y);
+        }
+        // ctx.arc(point.x, point.y, 0.25, 0, TWO_PI);
+      });
+      ctx.stroke();
+      ctx.closePath();
+      ctx.closePath();
     });
+    requestAnimationFrame(this.renderWaves);
   };
 
-  plotSine = (frequency = 12, amplitude = 25) => {
-    const { ctx, width, height } = this.stage;
-    const xspacing = 10;
-    const w = width;
-    const period = 1;
-    const dx = ((2 * Math.PI) / period) * xspacing;
-    let yvalues = new Array(Math.round(w));
-    let theta = 0;
-
-    ctx.beginPath();
-
-    // For every x value, calculate a y value with sine function
-    for (let i = 0; i < yvalues.length; i++) {
-      // yvalues[i] = -Math.sin(theta * frequency) * amplitude;
-      yvalues[i] = -Math.sin(period * (Math.PI * (i / 180))) * amplitude;
-
-      theta += dx;
-    }
-
-    for (let x = 0; x < yvalues.length; x++) {
-      let y = height / 2 + yvalues[x];
-      ctx.lineTo(x, y);
-    }
-
-    ctx.stroke();
-    ctx.closePath();
-  };
   render() {
     const { dimensions } = this.props;
     return (
@@ -67,14 +142,14 @@ class HelloCanvas extends Component {
         onResize={this.draw}
         refreshRate={0}
         dimensions={dimensions}
-        style={{ margin: "0 auto",}}
+        style={{ margin: "0 auto" }}
       />
     );
   }
 }
 
 function App() {
-  return <HelloCanvas dimensions={{ width: "400px", height: "600px" }} />;
+  return <HelloCanvas dimensions={{ width: "100vw", height: "100vh" }} />;
 }
 
 export default App;
