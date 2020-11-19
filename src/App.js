@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Canvas } from "./components";
 
 const TWO_PI = 2 * Math.PI;
+const PHI = (1 + Math.sqrt(5)) / 2;
 
 class SineWave {
   constructor(
@@ -12,8 +13,10 @@ class SineWave {
     { canvasWidth, canvasHeight, ctx },
     r = 0,
     g = 0,
-    b = 0
+    b = 0,
+    cos
   ) {
+    this.cos = cos;
     this.initAmp = amplitude;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
@@ -35,8 +38,8 @@ class SineWave {
 
   calcWave = () => {
     const { yvalues, dx, canvasHeight } = this;
-
-    if (this.amplitude >= this.initAmp * 5) {
+    const threshold = this.initAmp * 9;
+    if (this.amplitude >= threshold) {
       this.increasing = false;
       this.decreasing = true;
     }
@@ -59,11 +62,18 @@ class SineWave {
     let x = this.theta;
 
     for (let i = 0; i < yvalues.length; i++) {
-      // scaled overtones
-      this.yvalues[i] = Math.sin(this.amplitude * x) * this.amplitude;
 
-      //scaled amplitudes
-      // this.yvalues[i] = Math.sin(x) * this.amplitude;
+
+      if (this.cos) {
+        //scaled amplitudes... (A)
+        // this.yvalues[i] = Math.cos(x) * this.amplitude;
+        // scaled overtones (B)
+        this.yvalues[i] = Math.cos(this.amplitude * x) * (this.amplitude);
+      } else {
+        this.yvalues[i] = Math.sin(x) * this.amplitude;
+        // scaled overtones (B)
+        // this.yvalues[i] = Math.sin(this.amplitude * x) * (this.amplitude);
+      }
 
       this.coords[i] = {
         x: i * this.xspacing,
@@ -80,13 +90,29 @@ class HelloCanvas extends Component {
     ctx.clearRect(0, 0, width, height);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = 0.5;
+    ctx.lineWidth = 0.2;
     this.waves = [];
-    for (let i = 0; i <= 13; i++) {
+    for (let i = 0; i <= 26; i++) {
       if (this.waves[i]?.anim) cancelAnimationFrame(this.anim);
+      // this.waves.push(
+      //   new SineWave(
+      //     1, // frequency
+      //     i, //amplitude
+      //     1, // period
+      //     1, // xspacing
+      //     {
+      //       canvasWidth: width,
+      //       canvasHeight: height,
+      //       ctx,
+      //     },
+
+      //     168, 218, 220
+      //     , true
+      //   )
+      // );
       this.waves.push(
         new SineWave(
-          1,
+          1, // frequency
           i, //amplitude
           i, // period
           i, // xspacing
@@ -95,12 +121,25 @@ class HelloCanvas extends Component {
             canvasHeight: height,
             ctx,
           },
-          170 + i,
-          200,
-          200 + i
-          // Math.round(Math.random() * 255),
-          // Math.round(Math.random() * 255),
-          // Math.round(Math.random() * 255)
+          // 255,255,255
+          168, 218, 220
+          , false
+        )
+      )
+      this.waves.push(
+        new SineWave(
+          1, // frequency
+          i, //amplitude
+          i, // period
+          1, // xspacing
+          {
+            canvasWidth: width,
+            canvasHeight: height,
+            ctx,
+          },
+          // 255,255,255
+          168, 218, 220
+          , false
         )
       );
     }
@@ -110,7 +149,7 @@ class HelloCanvas extends Component {
 
   renderWaves = () => {
     const { ctx, width, height } = this.stage;
-    ctx.fillStyle = "white";
+    ctx.filleStyle = "black"
     ctx.fillRect(0, 0, width, height);
     this.waves.forEach((w) => {
       const { ctx, width, height } = this.stage;
