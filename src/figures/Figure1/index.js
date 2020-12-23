@@ -63,7 +63,7 @@ class Figure1 extends Component {
     }
 
     drawModuleLayer = (N_NEURONS) => {
-        const { stage: { ctx, width, height }, state: { input, radix } } = this;
+        const { stage: { ctx, width, height } } = this;
         this.moduleLayer = new Layer();
 
         N_NEURONS.forEach((l, index) => {
@@ -81,7 +81,6 @@ class Figure1 extends Component {
         this.ringLayer = new Layer();
         const labels = Scale.rangeOf("C major")("C2", "C5");
         for (let i = 0; i < labels.length; i++) {
-            console.log(i)
             const x = width - (height / (3 * N_NEURONS.length)) - 10;
             const y = 10 + i * (height / N_NEURONS.length) + (height / (3 * N_NEURONS.length));
             const r = (height / (3 * N_NEURONS.length));
@@ -126,10 +125,13 @@ class Figure1 extends Component {
                     The input `y` is defined as any integer `ZZ` <br />
                 </p>
                 <p>
-                    The second layer can be viewed as the multiplication table of the monoid `{`( (ZZ//${this.state.radix}ZZ), {1, @} )`}`, where `{`ZZ//${this.state.radix}ZZ`}` is the set of positive integers partitioned by the residue classes modulo {this.state.radix}, and the operator `@` refers to the abstract multiplication between `y` and elements of this monoid.<br />
+                    The second layer can be viewed as the multiplication table of the monoid `M = {`( (ZZ//${this.state.radix}ZZ), {1, @} )`}`, where `{`ZZ//${this.state.radix}ZZ`}` is the set of positive integers partitioned by the residue classes modulo {this.state.radix}, and the operator `@` refers to the abstract multiplication between `y` and elements of this monoid.<br />
                 </p>
                 <p>
-                    This forms an R-Module over ring `{`ZZ//${this.state.radix}ZZ`}` yielding output `hat y`. <br />
+                   Let `S subset ZZ//12Z` be a subring representing any collection of notes from the chromatic scale.
+                </p>
+                <p>
+                    The third layer takes `M` to form an R-Module over `S` yielding output `hat y`.  <br />
                 </p>
                 <p>
                     Although the network produces compelling outputs worthy of more detailed analyses, it is not yet "learning," per se.
