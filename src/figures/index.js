@@ -1,0 +1,1 @@
+export { Figure1 } from "./Figure1";
