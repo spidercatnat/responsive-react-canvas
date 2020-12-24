@@ -6,7 +6,7 @@ import { Scale } from "@tonaljs/tonal";
 class Figure1 extends Component {
     state = {
         radix: 13,
-        input: 1,
+        input: 3,
     }
 
     setupCanvas = (stage) => {
@@ -17,11 +17,11 @@ class Figure1 extends Component {
         ctx.lineJoin = "round";
         ctx.textAlign = "center";
         ctx.textBaseline = 'middle';
-        ctx.lineWidth = 0.25;
+        ctx.lineWidth = 0.35;
     }
 
     draw = (stage) => {
-        const N_NEURONS = Array.from(Array(this.state.radix - 1).keys()).map(k => k + 1);
+        const N_NEURONS = Array.from(Array(this.state.radix).keys()).map(k => k + 1);
 
         // Setup
         this.setupCanvas(stage);
@@ -40,7 +40,7 @@ class Figure1 extends Component {
     };
 
     connectLayers = () => {
-        const { stage: { ctx, width, height }, state: { input, radix } } = this;
+        const { stage: { ctx }, state: { radix } } = this;
 
         // Connect the input layer to the module layer
         for (const neuron of this.moduleLayer.neurons) {
@@ -49,7 +49,7 @@ class Figure1 extends Component {
 
         // Connect the module layer to the ring layer
         this.moduleLayer.neurons.forEach((n, i) => {
-            const index = ((n.l * (this.inputLayer.neurons[0].l)) % radix);
+            const index = !((n.l * (this.inputLayer.neurons[0].l)) % radix) ? radix : (n.l * (this.inputLayer.neurons[0].l)) % radix
             n.connect(this.stage.ctx, this.ringLayer.neurons[(index) - 1])
         });
 
@@ -102,7 +102,7 @@ class Figure1 extends Component {
     render() {
         const { dimensions } = this.props;
         return (
-            <div style={{ width: "80vw", height: "50vh", margin: "0 auto", marginTop: "3vh", position: "relative" }}>
+            <div style={{ width: "50vw", height: "50vh", margin: "0 auto", marginTop: "3vh", position: "relative" }}>
 
                 <div style={{ marginBottom: "5vh" }}>
                     <Canvas
@@ -115,20 +115,20 @@ class Figure1 extends Component {
                         }}
                     />
                     <h4>Radix</h4>
-                    <Slider value={this.state.radix} min={5} max={23} onChange={this.handleChangeRadix} />
+                    <Slider value={this.state.radix} min={5} max={19} onChange={this.handleChangeRadix} />
                     <h4>Input</h4>
-                    <Slider value={this.state.input} min={1} max={this.state.radix - 1} onChange={this.handleChangeInput} />
+                    <Slider value={this.state.input} min={1} max={this.state.radix} onChange={this.handleChangeInput} />
                 </div>
 
                 <p>
                     <h3>Figure 1 - Digital Network Computation Graph with 1 Input</h3>
-                    The input `y` is defined as any integer `ZZ` <br />
+                    The input `y` is defined as any integer `ZZ` where `{`y in {1 ... 13}`} `<br />
                 </p>
                 <p>
-                    The second layer can be viewed as the multiplication table of the monoid `M = {`( (ZZ//${this.state.radix}ZZ), {1, @} )`}`, where `{`ZZ//${this.state.radix}ZZ`}` is the set of positive integers partitioned by the residue classes modulo {this.state.radix}, and the operator `@` refers to the abstract multiplication between `y` and elements of this monoid.<br />
+                    The second layer can be viewed as the multiplication table of the monoid `M = {`( (ZZ//${this.state.radix}ZZ), {1, @} )`}`, where `{`ZZ//${this.state.radix}ZZ`}` is the set of positive integers partitioned by the residue classes modulo {this.state.radix}, and the operator `@` refers to the abstract multiplication between `y` and elements of this monoid. <br />
                 </p>
                 <p>
-                   Let `S subset ZZ//12Z` be a subring representing any collection of notes from the chromatic scale.
+                    Let `S subset ZZ//12ZZ` be a subring representing any collection of notes from the chromatic scale.
                 </p>
                 <p>
                     The third layer takes `M` to form an R-Module over `S` yielding output `hat y`.  <br />
